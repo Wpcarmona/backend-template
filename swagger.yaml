@@ -1,0 +1,788 @@
+openapi: 3.0.0
+info:
+  title: 'API Documentation'
+  version: '1.0.0'
+  description: 'Documentación de la API para gestión de usuarios, autenticación y favoritos'
+servers:
+  - url: https://backend-cinema-ldnr.onrender.com/cinema
+    description: Servidor de desarrollo.
+paths:
+  /users:
+    get:
+      summary: Obtener todos los usuarios
+      tags:
+        - Usuarios
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de usuarios
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  header:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        error:
+                          type: string
+                        code:
+                          type: integer
+                  body:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        total:
+                          type: integer
+                        users:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              _id:
+                                type: string
+                              name:
+                                type: string
+                              email:
+                                type: string
+                              phone:
+                                type: string
+                              directory:
+                                type: string
+
+    post:
+      summary: Crear un nuevo usuario
+      tags:
+        - Usuarios
+      requestBody:
+        description: Datos del usuario a crear
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+                phone:
+                  type: string
+                directory:
+                  type: string
+      responses:
+        '200':
+          description: Usuario creado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  header:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        error:
+                          type: string
+                        code:
+                          type: integer
+                        token:
+                          type: string
+                  body:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        name:
+                          type: string
+                        email:
+                          type: string
+                        phone:
+                          type: string
+                        directory:
+                          type: string
+
+  /users/{id}:
+    get:
+      summary: Obtener un usuario por ID
+      tags:
+        - Usuarios
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del usuario a obtener
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Usuario encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  header:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        error:
+                          type: string
+                        code:
+                          type: integer
+                  body:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        usuario:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            name:
+                              type: string
+                            email:
+                              type: string
+                            phone:
+                              type: string
+                            directory:
+                              type: string
+
+    put:
+      summary: Actualizar un usuario por ID
+      tags:
+        - Usuarios
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del usuario a actualizar
+          schema:
+            type: string
+      requestBody:
+        description: Datos del usuario a actualizar
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+                phone:
+                  type: string
+                directory:
+                  type: string
+      responses:
+        '200':
+          description: Usuario actualizado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  header:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        error:
+                          type: string
+                        code:
+                          type: integer
+                  body:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        msg:
+                          type: string
+                        user:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            name:
+                              type: string
+                            email:
+                              type: string
+                            phone:
+                              type: string
+                            directory:
+                              type: string
+
+    delete:
+      summary: Eliminar un usuario por ID
+      tags:
+        - Usuarios
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del usuario a eliminar
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Usuario eliminado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  header:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        error:
+                          type: string
+                        code:
+                          type: integer
+                  body:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        msg:
+                          type: string
+                        usuario:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            name:
+                              type: string
+                            email:
+                              type: string
+                            phone:
+                              type: string
+                            directory:
+                              type: string
+
+  /users/resetpassword:
+    post:
+      summary: Recuperar contraseña del usuario
+      tags:
+        - Usuarios
+      requestBody:
+        description: Correo del usuario para recuperar la contraseña
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+      responses:
+        '200':
+          description: Correo enviado para recuperar la contraseña
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  header:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        ERROR:
+                          type: string
+                        code:
+                          type: integer
+                  body:
+                    type: array
+                    items:
+                      type: object
+
+  /users/updatepass:
+    post:
+      summary: Actualizar contraseña del usuario con correo
+      tags:
+        - Usuarios
+      requestBody:
+        description: Correo y nueva contraseña del usuario
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                pass:
+                  type: string
+      responses:
+        '200':
+          description: Contraseña actualizada exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  header:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        error:
+                          type: string
+                        code:
+                          type: integer
+                  body:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        msg:
+                          type: string
+
+  /users/code:
+    post:
+      summary: Validar código de usuario
+      tags:
+        - Usuarios
+      requestBody:
+        description: Código de validación del usuario
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+      responses:
+        '200':
+          description: Usuario validado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  header:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        error:
+                          type: string
+                        code:
+                          type: integer
+                  body:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        msg:
+                          type: string
+                        toke:
+                          type: string
+                        user:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            name:
+                              type: string
+                            email:
+                              type: string
+                            phone:
+                              type: string
+                            directory:
+                              type: string
+
+  /users/updatepassworduser:
+    post:
+      summary: Actualizar correo del usuario
+      tags:
+        - Usuarios
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Correo actual y nuevo del usuario
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                newEmail:
+                  type: string
+      responses:
+        '200':
+          description: Correo actualizado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  header:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        error:
+                          type: string
+                        code:
+                          type: integer
+                  body:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        msg:
+                          type: string
+
+  /login:
+    post:
+      summary: Iniciar sesión
+      tags:
+        - Autenticación
+      requestBody:
+        description: Datos de inicio de sesión
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Inicio de sesión exitoso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  header:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        error:
+                          type: string
+                        code:
+                          type: integer
+                        token:
+                          type: string
+                  body:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        user:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            name:
+                              type: string
+                            email:
+                              type: string
+                            phone:
+                              type: string
+                            directory:
+                              type: string
+
+  /genNewToken:
+    post:
+      summary: Generar un nuevo token
+      tags:
+        - Autenticación
+      requestBody:
+        description: Token actual para generar uno nuevo
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+      responses:
+        '200':
+          description: Nuevo token generado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  header:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        error:
+                          type: string
+                        code:
+                          type: integer
+                        token:
+                          type: string
+                  body:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        newToken:
+                          type: string
+
+  /logout:
+    post:
+      summary: Cerrar sesión
+      tags:
+        - Autenticación
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Cierre de sesión exitoso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  header:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        error:
+                          type: string
+                        code:
+                          type: integer
+                  body:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        msg:
+                          type: string
+
+  /favorites/usuario/{userId}:
+    get:
+      summary: Obtener favoritos por ID de usuario
+      tags:
+        - Favoritos
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: ID del usuario para obtener sus favoritos
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Lista de favoritos del usuario
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  header:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        error:
+                          type: string
+                        code:
+                          type: integer
+                  body:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        favorites:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              _id:
+                                type: string
+                              userId:
+                                type: string
+                              favoriteId:
+                                type: string
+                              type:
+                                type: string
+
+  /favorites/{id}:
+    get:
+      summary: Obtener un favorito por ID
+      tags:
+        - Favoritos
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del favorito a obtener
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Favorito encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  header:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        error:
+                          type: string
+                        code:
+                          type: integer
+                  body:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        favorite:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            userId:
+                              type: string
+                            favoriteId:
+                              type: string
+                            type:
+                              type: string
+
+    post:
+      summary: Guardar un nuevo favorito
+      tags:
+        - Favoritos
+      requestBody:
+        description: Datos del nuevo favorito
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                favoriteId:
+                  type: string
+                type:
+                  type: string
+      responses:
+        '200':
+          description: Favorito guardado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  header:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        error:
+                          type: string
+                        code:
+                          type: integer
+                  body:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        favorite:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            userId:
+                              type: string
+                            favoriteId:
+                              type: string
+                            type:
+                              type: string
+
+    put:
+      summary: Actualizar un favorito por ID
+      tags:
+        - Favoritos
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del favorito a actualizar
+          schema:
+            type: string
+      requestBody:
+        description: Datos del favorito a actualizar
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                favoriteId:
+                  type: string
+                type:
+                  type: string
+      responses:
+        '200':
+          description: Favorito actualizado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  header:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        error:
+                          type: string
+                        code:
+                          type: integer
+                  body:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        favorite:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                            userId:
+                              type: string
+                            favoriteId:
+                              type: string
+                            type:
+                              type: string
