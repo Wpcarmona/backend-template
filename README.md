@@ -24,7 +24,14 @@ npm install -g nodemon
 
 ### Ejecutar en ambiente local
 
-para ejecutar de manera local el backend ejecutar el comaando 
+1. primeramente debera ejecutar la instalacion de los modulos de node para ello ejecute el siguiente comenado
+
+```bash
+
+npm i
+
+```
+2. para ejecutar de manera local el backend ejecutar el comando 
 
 ```bash
 
