@@ -11,11 +11,11 @@ const {
   updatePassWithEmail,
   validateCodeUser,
   updateEmail,
-} = require("../controllers/user.controller");
+} = require("../controllers/userController");
 const { existeUsuarioPorId } = require("../helpers/db-validators");
 
-const { validateCampos } = require("../middlewares/validar-campos");
-const { validateJWT } = require("../middlewares/validar-jwt");
+const { validateFields } = require("../middlewares/validaFieldsMiddleware");
+const { validateJWT } = require("../middlewares/validateJWTMiddleware");
 
 const router = Router();
 
@@ -29,7 +29,7 @@ router.put(
     validateJWT,
     check("id", "No es un ID valido").isMongoId(),
     check("id").custom(existeUsuarioPorId),
-    validateCampos,
+    validateFields,
   ],
   usuariosPut
 );
@@ -42,7 +42,7 @@ router.post(
     check("password"),
     check("phone"),
     check("directory"),
-    validateCampos,
+    validateFields,
   ],
   usuariosPost
 );
@@ -53,7 +53,7 @@ router.delete(
     validateJWT,
     check("id", "No es un ID valido").isMongoId(),
     check("id").custom(existeUsuarioPorId),
-    validateCampos,
+    validateFields,
   ],
   usuariosDelete
 );

@@ -1,9 +1,9 @@
 const express = require("express");
-const cors = require("cors");
-const { dbConnection } = require("../database/config");
 const YAML = require('yamljs');
 const path = require('path'); 
 const swaggerUi = require('swagger-ui-express');
+const cors = require("cors");
+const { dbConnection } = require("../database/configDB");
 
 class Server {
   constructor() {
@@ -13,9 +13,10 @@ class Server {
     this.app.use(express.json({ limit: "50mb", extended: true }));
     this.app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
+    //modificar el path de ser necesario
     this.path = {
-      usuarios: "/cinema/usuarios",
-      auth: "/cinema/auth",
+      users: "/api/users",
+      auth: "/api/auth",
     };
 
     this.conectarDB();
@@ -46,8 +47,8 @@ class Server {
   }
 
   routes() {
-    this.app.use(this.path.auth, require("../routes/auth"));
-    this.app.use(this.path.usuarios, require("../routes/user"));
+    this.app.use(this.path.auth, require("../routes/authRoutes"));
+    this.app.use(this.path.users, require("../routes/userRoutes"));
   }
 
   listen() {

@@ -1,6 +1,6 @@
 const { response } = require("express");
 
-const esAdminRole = (req, res = response, next) => {
+const isAdminRol = (req, res = response, next) => {
   if (!req.usuario) {
     return res.status(500).json({
       header: [
@@ -30,7 +30,7 @@ const esAdminRole = (req, res = response, next) => {
   next();
 };
 
-const tieneRole = (...roles) => {
+const hasRole = (...roles) => {
   return (req, res = response, next) => {
     if (!req.usuario) {
       return res.status(500).json({
@@ -59,6 +59,6 @@ const tieneRole = (...roles) => {
 };
 
 module.exports = {
-  esAdminRole,
-  tieneRole,
+  isAdminRol,
+  hasRole,
 };

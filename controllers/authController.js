@@ -1,6 +1,6 @@
 const { response } = require("express");
 const bcryptjs = require("bcryptjs");
-const Usuario = require("../models/usuario");
+const Usuario = require("../models/usersModel");
 const { generarJWT } = require("../helpers/generar-jwt");
 const blacklist = require("../helpers/token-black-list"); 
 
@@ -48,12 +48,19 @@ const login = async (req, res = response) => {
 
     const token = await generarJWT(usuario.id);
 
+    res.cookie('token', token, {
+      httpOnly: true, 
+      secure: true,   
+      sameSite: 'Strict', 
+      maxAge: 14 * 24 * 60 * 60 * 1000, 
+  });
+
     res.status(200).json({
       header: [
         {
           error: "NO ERROR",
           code: 200,
-          token: token,
+          token
         },
       ],
       body: [usuario],
@@ -118,32 +125,36 @@ const generateNewToken = async (req, res = response) => {
 };
 
 const logout = async (req, res = response) => {
-  const token = req.header('Authorization'); 
-
-  if (!token) {
-    return res.status(400).json({
-      header: [
-        {
-          error: "El token es requerido",
-          code: 400,
-        },
-      ],
-      body: [{}],
-    });
-  }
-
   try {
-    blacklist.add(token);
+    const token = req.header("authorization");
+    if (!token) {
+      return res.status(200).json({
+        header: [
+          {
+            error: "No existe una autorizacion valida",
+            code: 401,
+          },
+        ],
+        body: [{}],
+      });
+    }
+  
+    //arreglar el logout
+    res.cookie('token', '', {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'Strict',
+      maxAge: 0
+    });
 
     res.status(200).json({
       header: [
         {
           error: "NO ERROR",
           code: 200,
-          message: "Logout exitoso, token expirado",
         },
       ],
-      body: [{}],
+      body: [{ message: "Logout exitoso" }],
     });
   } catch (error) {
     console.log("logout error ==> " + error);
@@ -158,6 +169,8 @@ const logout = async (req, res = response) => {
     });
   }
 };
+
+
 
 module.exports = {
   login,

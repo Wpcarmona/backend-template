@@ -1,9 +1,11 @@
-const ValidateJWT = require("../middlewares/validar-jwt");
-const ValidateRoles = require("../middlewares/validar-roles");
-const ValidateCampos = require("../middlewares/validar-campos");
+const ValidateJWT = require('./validateJWTMiddleware');
+const ValidateRoles = require('./validateRolMiddleware');
+const ValidateCampos = require('./validaFieldsMiddleware');
+const AuthMiddleware = require('./authMiddleware');
 
 module.exports = {
   ...ValidateCampos,
   ...ValidateJWT,
   ...ValidateRoles,
+  ...AuthMiddleware
 };

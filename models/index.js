@@ -1,6 +1,6 @@
-const Role = require("./role");
-const Usuario = require("./usuario");
-const Server = require("./server");
+const Role = require("./roleModel");
+const Usuario = require("./usersModel");
+const Server = require("./serverModel");
 
 module.exports = {
   Role,

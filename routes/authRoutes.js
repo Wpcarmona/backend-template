@@ -1,15 +1,15 @@
 const { Router} = require('express');
 const { check } = require('express-validator');
-const { login, generateNewToken,logout } = require('../controllers/auth.controller');
-const { validateCampos } = require('../middlewares/validar-campos');
-const { validarJWT } = require('../middlewares/auth');
+const { login, generateNewToken,logout } = require('../controllers/authController');
+const { validateFields } = require('../middlewares/validaFieldsMiddleware');
+const { validarJWT } = require('../middlewares/authMiddleware');
 
 const router = Router();
 
 router.post('/login',[
     check('email', 'El correo es obligatorio').isEmail(),
     check('password', 'el password es obligatorio').not().isEmpty(),
-    validateCampos
+    validateFields
 ], login);
 
 router.get('/genNewToken',generateNewToken)

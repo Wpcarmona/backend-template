@@ -1,6 +1,6 @@
 const { response, request } = require("express");
 const bcryptjs = require("bcryptjs");
-const Usuario = require("../models/usuario");
+const Usuario = require("../models/usersModel");
 const { generarJWT } = require("../helpers");
 const mongoose = require("mongoose"); 
 const cloudinary = require("cloudinary").v2;
